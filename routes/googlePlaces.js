@@ -1,18 +1,30 @@
 const fetch = require('node-fetch');
 const config = require('config');
 
-const { googlePlaces: { getGroceryUrl, getPhotoUrl } } = config;
+const { googlePlaces: { getGroceryUrl, getPhotoUrl, mapsUrl } } = config;
 
 const headers = {
   'Content-Type': 'application/json'
 };
 
 function initGooglePlaces(app) {
-  app.get('/nearbyGrocery', async (req, res) => {
+  app.get('/grocery/nearby/:lat/:long', async (req, res) => {
+    const { lat, long } = req.params;
+
+    if (!lat || !long) {
+      _sendClientError(res);
+      return;
+    }
+
+    const url = getGroceryUrl + `&location=${lat},${long}`;
     try {
-      const response = await fetch(getGroceryUrl, { method: 'POST', headers });
+      const response = await fetch(url, { method: 'POST', headers });
       const json = await response.json();
-      res.json(json);
+      const mappedResults = json.results.map((location) => {
+        location.mapsUrl = generateMapsLink(location.place_id);
+        return location;
+      });
+      res.json(mappedResults);
     }
     catch (error) {
       console.error(error);
@@ -20,7 +32,7 @@ function initGooglePlaces(app) {
     }
   });
 
-  app.get('/groceryPhoto/:id', async (req, res) => {
+  app.get('/grocery/photo/:id', async (req, res) => {
     const { id } = req.params;
 
     if (!id) {
@@ -38,6 +50,10 @@ function initGooglePlaces(app) {
       _sendServerError(res);
     }
   });
+}
+
+function generateMapsLink(placeId) {
+  return mapsUrl + placeId;
 }
 
 function _sendServerError(res) {
