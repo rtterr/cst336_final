@@ -16,6 +16,8 @@ function initProductSearch(app) {
     try {
       const response = await fetch(url, { method: 'GET' });
       const json = await response.json();
+
+      console.log(json);
       res.json(json);
     }
     catch (error) {

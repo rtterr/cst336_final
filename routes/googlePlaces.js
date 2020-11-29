@@ -25,6 +25,8 @@ function initGooglePlaces(app) {
         location.mapsUrl = generateMapsLink(location.place_id);
         return location;
       });
+
+      console.log(mappedResults);
       res.json(mappedResults);
     }
     catch (error) {
@@ -44,6 +46,8 @@ function initGooglePlaces(app) {
     try {
       const url = getPhotoUrl + id;
       const { url: photoUrl } = await fetch(url);
+
+      console.log(photoUrl);
       res.json({ url: photoUrl });
     }
     catch (error) {
