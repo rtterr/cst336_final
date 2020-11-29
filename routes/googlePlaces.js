@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const config = require('config');
+const { sendClientError, sendServerError } = require('../utils/error');
 
 const { googlePlaces: { getGroceryUrl, getPhotoUrl, mapsUrl } } = config;
 
@@ -12,7 +13,7 @@ function initGooglePlaces(app) {
     const { lat, long } = req.params;
 
     if (!lat || !long) {
-      _sendClientError(res);
+      sendClientError(res);
       return;
     }
 
@@ -28,7 +29,7 @@ function initGooglePlaces(app) {
     }
     catch (error) {
       console.error(error);
-      _sendServerError(res);
+      sendServerError(res, 'Google Places error');
     }
   });
 
@@ -36,7 +37,7 @@ function initGooglePlaces(app) {
     const { id } = req.params;
 
     if (!id) {
-      _sendClientError(res);
+      sendClientError(res);
       return;
     }
 
@@ -47,23 +48,13 @@ function initGooglePlaces(app) {
     }
     catch (error) {
       console.error(error);
-      _sendServerError(res);
+      sendServerError(res, 'Google Places error');
     }
   });
 }
 
 function generateMapsLink(placeId) {
   return mapsUrl + placeId;
-}
-
-function _sendServerError(res) {
-  res.statusCode = 500;
-  res.json({ message: 'Google Places error' });
-}
-
-function _sendClientError(res) {
-  res.statusCode = 400;
-  res.json({ message: 'invalid request' });
 }
 
 module.exports = initGooglePlaces;
