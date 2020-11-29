@@ -1,7 +1,0 @@
-/**
- * user routes
- */
-
-function initUsers() {
-
-}
