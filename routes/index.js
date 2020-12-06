@@ -1,14 +1,14 @@
 const initViews = require('./views');
 const initGooglePlaces = require('./googlePlaces');
 const initProductSearch = require('./productSearch');
-const initUser = require('./user');
-const initCart = require('./cart');
+const initCustomer = require('./customer');
+const initCart = require('./order');
 
 function initRoutes(app) {
   initViews(app);
   initGooglePlaces(app);
   initProductSearch(app);
-  // initUser(app);
+  initCustomer(app);
   // initCart(app);
 }
 
