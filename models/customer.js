@@ -36,7 +36,7 @@ class CustomerModel extends Model {
   static async GetByEmail(email) {
     try {
       const rows = await this.postgres.query(
-        'SELECT * ' +
+        'SELECT id, first_name AS "firstName", last_name AS "lastName", email, address, password  ' +
         'FROM customers ' +
         'WHERE email = $1;',
         [email]
@@ -51,11 +51,11 @@ class CustomerModel extends Model {
 
   static async Insert(customer) {
     try {
-      const { id, firstName, lastName, email, address } = customer;
+      const { id, firstName, lastName, email, address, password } = customer;
       await this.postgres.query(
-        'INSERT INTO customers (id, first_name, last_name, email, address)'
-        + 'VALUES ($1, $2, $3, $4, $5);',
-        [id, firstName, lastName, email, address]
+        'INSERT INTO customers (id, first_name, last_name, email, address, password)'
+        + 'VALUES ($1, $2, $3, $4, $5, $6);',
+        [id, firstName, lastName, email, address, password]
       );
       return { id };
     }

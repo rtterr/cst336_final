@@ -8,7 +8,13 @@ function sendServerError(res, message) {
   res.json({ message });
 }
 
+function sendUnauthorized(res) {
+  res.statusCode = 401;
+  res.json({ message: 'invalid credentials' });
+}
+
 module.exports = {
   sendClientError,
-  sendServerError
+  sendServerError,
+  sendUnauthorized
 };

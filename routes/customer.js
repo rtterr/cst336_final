@@ -13,6 +13,8 @@ function initCustomer(app) {
       }
 
       const customer = await customerController.getCustomerById(id);
+      console.log(customer);
+
       res.statusCode = 200;
       res.json({ ...customer });
     }
