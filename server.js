@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 const renderFile = require('ejs').renderFile;
 
 class Server {
@@ -10,9 +11,15 @@ class Server {
   constructor() {
     this._app = express();
     this._app.engine('html', renderFile);
+    this._app.set('view engine', 'ejs');
     this._app.use(express.static('public'));
     this._app.use(bodyParser.json());
     this._app.use(bodyParser.urlencoded({ extended: true, }));
+    this._app.use(session({
+      secret: 'top secret!',
+      resave: true,
+      saveUninitialized: true
+    }));
   }
 
   get app() {

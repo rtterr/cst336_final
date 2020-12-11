@@ -1,8 +1,5 @@
-const { postgresUrl } = require('config');
-const Postgres = require('./postgres');
-
-const postgres = new Postgres(postgresUrl);
+const pool = require('./mysql');
 
 module.exports = {
-  postgres
+  pool
 };

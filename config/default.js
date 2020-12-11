@@ -14,5 +14,11 @@ module.exports = {
   },
   productSearch: {
     queryUrl: `https://api.spoonacular.com/food/products/search?number=6&apiKey=${SPOONACULAR_API_KEY}&query=`
+  },
+  mySql: {
+    host: 'ijj1btjwrd3b7932.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+    user: 'atl9gh0n9ibhuu5p',
+    password: 'csbxzy852g3cvkyn',
+    database: 'f51qdfp6h2j59rfu'
   }
 };
