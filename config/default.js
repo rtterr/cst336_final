@@ -13,7 +13,7 @@ module.exports = {
     mapsUrl: `https://www.google.com/maps/place/?q=place_id:`
   },
   productSearch: {
-    queryUrl: `https://api.spoonacular.com/food/products/search?number=6&apiKey=${SPOONACULAR_API_KEY}&query=`
+    queryUrl: `https://api.spoonacular.com/food/products/search?number=9&apiKey=${SPOONACULAR_API_KEY}&query=`
   },
   mySql: {
     host: 'ijj1btjwrd3b7932.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',

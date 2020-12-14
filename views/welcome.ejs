@@ -1,8 +1,13 @@
 <%- include('partials/header.ejs') %>
-        <main>
-            <h1> Welcome </h1>
-            <form action="/logout">
-                <button> Logout </button>
-            </form>
-        </main>
+<main>
+    <h1> Welcome </h1>
+    <form action="/logout">
+        <button> Logout</button>
+    </form>
+    <button id="select-store" disabled>Select Store (Loading)</button>
+    <div id="stores" hidden></div>
+    <div id="product-search" hidden></div>
+    <div id="product-list" hidden></div>
+</main>
+<script src="js/welcome.js"></script>
 <%- include('partials/footer.ejs') %>

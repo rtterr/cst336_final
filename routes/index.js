@@ -26,7 +26,6 @@ function initRoutes(app) {
       case 'login':
         console.log('User Login');
         result = await checkUsername(username);
-        //console.dir(result);
         let hashedPwd = '';
 
         if (result.length > 0) {
