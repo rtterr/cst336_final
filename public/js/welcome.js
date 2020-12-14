@@ -18,6 +18,7 @@ async function fetchProducts(productName) {
   return products;
 }
 
+// TODO: this will be faster if we organize the data on the backend
 async function fetchNearbyByCurrentPosition({ coords: { latitude, longitude } }) {
   const stores = await getNearbyGroceryStore(latitude, longitude);
   return await Promise.all(stores.map((store) => {
