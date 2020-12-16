@@ -1,17 +1,11 @@
 <div id="account">
     <% if (typeof logged != "undefined" && logged) { %>
-        <ul>
-        	<li class="nav">
-        		<a class="<%= active === 'store' && 'active' %>" href="/store"> Store Search </a>
-        	</li>
-        	<li class="nav">
-        		<a class="<%= active === 'cart' && 'active' %>" href="/cart"> Shopping Cart </a>
-        	</li>
-        	<li class="nav">
-        		[ <%= username %>: <a class="button" href="/logout"><u>Logout</u></a> ]
-        	</li>
-        </ul>
+
+        		<p id="navigation">[ <a class="<%= active === 'store' && 'active' %>" href="/store"> Store Search </a> ]
+        		[ <a class="<%= active === 'cart' && 'active' %>" href="/cart"> Shopping Cart </a> ] </p>&nbsp;
+        		<p id="logged">[ <%= username %>: <a class="button" href="/logout"><u>Logout</u></a> ]</p>
+
     <% } else { %>
-        <span id="logged">Not Logged In</span>
+        &nbsp;<p id="logged">Not Logged In</span>
     <% } %>
 </div>

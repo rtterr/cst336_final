@@ -45,6 +45,7 @@ async function prepStores(position) {
   const storesDiv = document.getElementById('stores');
   const storeContainer = document.createElement('div');
   storeContainer.id = 'store-container';
+  storeContainer.classList.add('row','row-cols-3');
 
   const selectStore = document.createElement('h1');
   selectStore.innerText = 'Select a Store';
@@ -55,25 +56,38 @@ async function prepStores(position) {
       continue;
     }
     const storeDiv = document.createElement('div');
+    storeDiv.classList.add('store-unit', 'col');
+
+    const leftCol = document.createElement('div');
+    leftCol.classList.add('store-leftcol');
+    storeDiv.appendChild(leftCol);
+
+    const rightCol = document.createElement('div');
+    rightCol.classList.add('store-rightcol');
+    storeDiv.appendChild(rightCol);
 
     const name = document.createElement('h3');
     name.innerText = store.name;
-    storeDiv.appendChild(name);
+    rightCol.appendChild(name);
+
+    const storeImgLink = document.createElement('a');
+    storeImgLink.href = '#';
+    leftCol.appendChild(storeImgLink);
 
     const storeImg = document.createElement('img');
     storeImg.classList.add('store-img');
     storeImg.src = store.photoUrl;
-    storeDiv.appendChild(storeImg);
+    storeImgLink.appendChild(storeImg);
 
     const addressDiv = document.createElement('div');
     addressDiv.innerText = store.vicinity;
-    storeDiv.appendChild(addressDiv);
+    rightCol.appendChild(addressDiv);
 
     const mapsLink = document.createElement('a');
     mapsLink.href = store.mapsUrl;
     mapsLink.target = '_blank';
     mapsLink.innerText = 'Google Maps';
-    storeDiv.appendChild(mapsLink);
+    rightCol.appendChild(mapsLink);
 
     storeContainer.appendChild(storeDiv);
   }
@@ -115,29 +129,30 @@ function displayProductSearch() {
 async function renderProducts(productName) {
   const products = await fetchProducts(productName);
   const productList = document.getElementById('product-list');
+  productList.classList.add('row','row-cols-3');
 
   for (const product of products) {
     const newListItem = document.createElement('div');
-    newListItem.classList.add('product-list-item');
-
-    const itemTitle = document.createElement('h3');
-    itemTitle.innerText = product.title;
-    newListItem.appendChild(itemTitle);
+    newListItem.classList.add('product-list-item', 'col');
 
     const imageContainer = document.createElement('div');
     imageContainer.classList.add('list-item-images');
+    newListItem.appendChild(imageContainer);
 
     const itemImg = document.createElement('img');
     itemImg.classList.add('product-image');
     itemImg.src = product.image;
     imageContainer.appendChild(itemImg);
 
+    const itemTitle = document.createElement('h3');
+    itemTitle.innerText = product.title;
+    newListItem.appendChild(itemTitle);
+
     const cartImg = document.createElement('img');
     cartImg.src = '../img/cart-icon.jpg';
     cartImg.classList.add('cart-img');
-    imageContainer.appendChild(cartImg);
+    newListItem.appendChild(cartImg);
 
-    newListItem.appendChild(imageContainer);
     productList.appendChild(newListItem);
   }
   initAddProductToCartHandler();
