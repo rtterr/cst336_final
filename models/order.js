@@ -38,6 +38,22 @@ class OrderModel extends Model {
       }
     });
   }
+
+  static deleteByImageUrl(itemImage) {
+    return new Promise((resolve, reject) => {
+      try {
+        const sql = 'DELETE FROM OrderItem WHERE itemImage = ?';
+        this.pool.query(sql, [itemImage], function (err, rows) {
+          console.log(rows);
+          resolve(true);
+        });
+      }
+      catch (error) {
+        console.error(error);
+        reject(error);
+      }
+    });
+  }
 }
 
 module.exports = OrderModel;

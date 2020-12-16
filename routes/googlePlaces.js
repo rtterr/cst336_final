@@ -10,6 +10,7 @@ const headers = {
 
 function initGooglePlaces(app) {
   app.get('/grocery/nearby/:lat/:long', async (req, res) => {
+    console.log(req.session.username);
     const { lat, long } = req.params;
 
     if (!lat || !long) {

@@ -11,7 +11,7 @@ class OrderController extends Controller {
 
   async create(username, storeId) {
     console.log({ username, storeId });
-    const { userid: userId } = userController.getByUsername(username);
+    const { userid: userId } = await userController.getByUsername(username);
     return await this.model.create({ userId, storeId });
   }
 
@@ -19,6 +19,12 @@ class OrderController extends Controller {
     const orderItemId = await this.model.createItem({ orderId, storeId, itemDescription, itemImage });
     console.log(orderItemId);
     return orderItemId;
+  }
+
+  async deleteByImageUrl(imageUrl) {
+    const isDeleted = await this.model.deleteByImageUrl(imageUrl);
+    console.log(isDeleted);
+    return isDeleted;
   }
 }
 

@@ -1,3 +1,6 @@
+let orderId;
+let storeId;
+
 /**
  * API calls
  */
@@ -16,6 +19,52 @@ async function fetchProducts(productName) {
   const response = await fetch(`/grocery/search?query=${productName}`);
   const { products } = await response.json();
   return products;
+}
+
+async function createOrder() {
+  const response = await fetch('/orders', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      storeId: storeId,
+    })
+  });
+  const { orderId } = await response.json();
+  return orderId;
+}
+
+async function createOrderItem(title, imageUrl) {
+  const itemBody = {
+    orderId: orderId,
+    storeId: storeId,
+    itemDescription: title,
+    itemImage: imageUrl
+  };
+
+  const response = await fetch('/orders/items', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(itemBody)
+  });
+  const { orderItemId } = await response.json();
+  return orderItemId;
+}
+
+async function deleteOrderItem(imageUrl) {
+  const response = await fetch(`/orders/items`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      imageUrl: imageUrl
+    })
+  });
+  return await response.json();
 }
 
 // TODO: this will be faster if we organize the data on the backend
@@ -63,6 +112,7 @@ async function prepStores(position) {
     const storeImg = document.createElement('img');
     storeImg.classList.add('store-img');
     storeImg.src = store.photoUrl;
+    storeImg.id = store.placeId;
     storeDiv.appendChild(storeImg);
 
     const addressDiv = document.createElement('div');
@@ -135,6 +185,8 @@ async function renderProducts(productName) {
     const cartImg = document.createElement('img');
     cartImg.src = '../img/cart-icon.jpg';
     cartImg.classList.add('cart-img');
+    cartImg.setAttribute('data-title', product.title);
+    cartImg.setAttribute('data-url', product.image);
     imageContainer.appendChild(cartImg);
 
     newListItem.appendChild(imageContainer);
@@ -149,16 +201,24 @@ function clearProductList() {
   productList.innerHTML = '';
 }
 
-function addItemToCart(item) {
+async function addItemToCart(item) {
   item.src = '../img/checkmark-icon.png';
-  item.inCart = true;
-  alert('this is where I would add to cart');
+  item.setAttribute('data-inCart', true);
+
+  if (!orderId) {
+    orderId = await createOrder();
+  }
+  const title = item.getAttribute('data-title');
+  const url = item.getAttribute('data-url');
+
+  await createOrderItem(title, url);
 }
 
-function removeItemFromCart(item) {
+async function removeItemFromCart(item) {
   item.src = '../img/cart-icon.jpg';
-  item.inCart = false;
-  alert('this is where I would remove from cart!');
+  item.removeAttribute('data-inCart');
+  const url = item.getAttribute('data-url');
+  await deleteOrderItem(url);
 }
 
 /**
@@ -178,6 +238,7 @@ function initStoreClickHandler() {
   storePhotos.forEach((img) => {
     img.addEventListener('click', function (event) {
       const storesDiv = document.getElementById('stores');
+      storeId = event.target.id;
       storesDiv.remove();
       displayProductSearch();
     });
@@ -201,11 +262,16 @@ function initAddProductToCartHandler() {
   for (const cartIcon of cartIcons) {
     cartIcon.addEventListener('click', function (event) {
       const item = event.target;
+      const inCart = Boolean(item.getAttribute('data-inCart'));
+      console.log(typeof inCart);
 
-      if (item.inCart) {
+      if (inCart) {
+        console.log(inCart);
+        console.log('removing')
         removeItemFromCart(item);
       }
       else {
+        console.log('adding');
         addItemToCart(item);
       }
     });
