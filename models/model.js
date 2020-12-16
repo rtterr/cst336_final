@@ -1,4 +1,4 @@
-const { postgres } = require('../data-sources/connections');
+const { pool } = require('../data-sources/connections');
 const generateId = require('../utils/generateId');
 
 /**
@@ -6,22 +6,18 @@ const generateId = require('../utils/generateId');
  */
 class Model {
   type;
-  static _postgres = postgres;
+  static _pool = pool;
 
-  /**
-   *
-   * @param {string} type
-   */
-  constructor(type) {
-    this.type = type;
+  static get pool() {
+    return this._pool;
   }
 
-  static get postgres() {
-    return this._postgres;
+  static generateId(type) {
+    return generateId(type);
   }
 
-  generateId() {
-    return generateId(this.type);
+  static generateIntId() {
+    return Math.floor(Math.random() * Math.floor(90000));
   }
 }
 

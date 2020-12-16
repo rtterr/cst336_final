@@ -1,6 +1,8 @@
 const initViews = require('./views');
 const initGooglePlaces = require('./googlePlaces');
 const initProductSearch = require('./productSearch');
+const initOrder = require('./order');
+const initUser = require('./user');
 const { pool } = require('../data-sources/connections');
 const bcrypt = require('bcrypt');
 
@@ -8,6 +10,8 @@ function initRoutes(app) {
   initViews(app);
   initGooglePlaces(app);
   initProductSearch(app);
+  initOrder(app);
+  initUser(app);
 
   app.get('/', function (req, res) {
     console.log('app.get: ' + req.session.id);

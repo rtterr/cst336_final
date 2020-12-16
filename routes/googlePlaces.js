@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const config = require('config');
 const { sendClientError, sendServerError } = require('../utils/error');
 
-const { googlePlaces: { getGroceryUrl, getPhotoUrl, mapsUrl } } = config;
+const { googlePlaces: { getGroceryUrl, getPhotoUrl, mapsUrl }, staticPlacesResponse } = config;
 
 const headers = {
   'Content-Type': 'application/json'
@@ -26,8 +26,12 @@ function initGooglePlaces(app) {
         return location;
       });
 
-      console.log(mappedResults);
-      res.json(mappedResults);
+      if (!mappedResults.length) {
+        res.json(staticPlacesResponse);
+      }
+      else {
+        res.json(mappedResults);
+      }
     }
     catch (error) {
       console.error(error);
