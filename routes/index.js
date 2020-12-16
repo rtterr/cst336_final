@@ -30,6 +30,7 @@ function initRoutes(app) {
       case 'login':
         console.log('User Login');
         result = await checkUsername(username);
+        //console.dir(result);
         let hashedPwd = '';
 
         if (result.length > 0) {
@@ -41,8 +42,10 @@ function initRoutes(app) {
         if (passwordMatch) {
           req.session.authenticated = true;
           req.session.username = username;
+          req.session.userid = result[0].userid;
 
           console.log('app.post req.session.id: ' + req.session.id);
+          console.log('userid: ' + req.session.userid);
           res.redirect('/welcome');
         }
         else {
@@ -60,8 +63,11 @@ function initRoutes(app) {
           res.render('index', { active: 'home', 'loginError': true });
         }
         else {
+          let email = req.body.email;
+          let first = req.body.firstName;
+          let last = req.body.lastName;
           let hashedPass = await hashPassword(password);
-          result = await addUsername(username, hashedPass);
+          result = await addUsername(username, hashedPass, first, last, email);
           req.session.authenticated = true;
           req.session.username = username;
           res.redirect('/welcome');
@@ -84,9 +90,21 @@ function initRoutes(app) {
     }); //promise
   }
 
-  function addUsername(username, password) {
-    let sql = 'INSERT INTO Users (username, password) VALUES (?,?)';
-    let sqlParams = [username, password];
+  function addUsername(username, password, first, last, email) {
+    let sql = 'INSERT INTO Users (username, password, nameFirst, nameLast, userEmail) VALUES (?,?,?,?,?)';
+    let sqlParams = [username, password, first, last, email];
+
+    return new Promise(function (resolve, reject) {
+      pool.query(sql, sqlParams, function (err, rows, fields) {
+        if (err) throw err;
+        resolve(rows);
+      }); //query
+    });
+  }
+
+  function updateUser(username, password, first, last, email) {
+    let sql = 'UPDATE Users set nameFirst = ?, nameLast = ?, userEmail = ? where username = ?';
+    let sqlParams = [first, last, email, username];
 
     return new Promise(function (resolve, reject) {
       pool.query(sql, sqlParams, function (err, rows, fields) {
@@ -116,9 +134,34 @@ function initRoutes(app) {
   app.get('/welcome', isAuthenticated, function (req, res) {
     console.log('/myAccount req.session.id: ' + req.session.id);
     let username = req.session.username;
+    let userid = req.session.userid;
     console.log('Username: ' + username);
     //res.render("welcome", );
-    res.render('welcome', { active: 'home', 'logged': true, 'username': username });
+    res.render('welcome', { active: 'home', 'logged': true, 'username': username, 'userid': userid });
+  });
+
+  app.get('/account', isAuthenticated, function (req, res) {
+    console.log('/account req.session.id: ' + req.session.id);
+    let username = req.session.username;
+    let userid = req.session.userid;
+    console.log('Username: ' + username);
+
+    res.render('account', { active: 'home', 'logged': true, 'username': username, 'userid': userid });
+  });
+
+  app.post('/account', async function (req, res) {
+    console.log('/account post req.session.id: ' + req.session.id);
+    let username = req.session.username;
+    let userid = req.session.userid;
+
+    let email = req.body.email;
+    let first = req.body.fname;
+    let last = req.body.lname;
+    let password = req.body.password;
+
+    updateUser(username, password, first, last, email);
+
+    res.render('account', { active: 'home', 'logged': true, 'username': username, 'userid': userid });
   });
 
   app.get('/logout', function (req, res) {
@@ -140,17 +183,61 @@ function initRoutes(app) {
     }
   }
 
-  app.get('/store', function (req, res) {
-    res.render('store', { active: 'store' });
-  });
-
-  app.get('/item', function (req, res) {
-    res.render('item', { active: 'item' });
-  });
-
   app.get('/cart', function (req, res) {
     res.render('cart', { active: 'cart' });
   });
+
+  //app.get('/history', function (req, res) {
+  app.get('/history', isAuthenticated, function (req, res) {
+    console.log('/history req.session.id: ' + req.session.id);
+    let username = req.session.username;
+    let userid = req.session.userid;
+    console.log('Username: ' + username);
+    res.render('history', { active: 'history', 'logged': true, 'username': username, 'userid': userid });
+  });
+
+  app.get('/api/order', function (req, res) {
+    let id = req.query.id;
+    //let sql = `select it.description, it.cost from OrderItem oi join Item it on (oi.Item_ID = it.Item_ID) where oi.order_ID = ${id}`;
+    let sql = `select oi.itemDescription, oi.itemImage, oi.quantity, oi.itemCost from OrderItem oi where oi.orderID = ${id}`;
+
+    console.log('Get Order: ' + id);
+    console.log(sql);
+
+    pool.query(sql, function (err, rows, fields) {
+      if (err) throw err;
+      console.log('rows' + rows);
+      res.send(rows);
+    });
+  });
+
+  app.get('/api/history', function (req, res) {
+    let id = req.query.id;
+    let sql = `select orderID from Orders where userID = ${id}`;
+
+    console.log('get history: ' + id);
+    console.log(sql);
+
+    pool.query(sql, function (err, rows, fields) {
+      if (err) throw err;
+      console.log('rows' + rows);
+      res.send(rows);
+    });
+  });//api/history
+
+  app.get('/api/customer', function (req, res) {
+    let id = req.query.id;
+    let sql = `select * from Users where userID = ${id}`;
+
+    console.log('get user: ' + id);
+    console.log(sql);
+
+    pool.query(sql, function (err, rows, fields) {
+      if (err) throw err;
+      console.log('rows' + rows);
+      res.send(rows);
+    });
+  });//api/history
 }
 
 module.exports = initRoutes;
