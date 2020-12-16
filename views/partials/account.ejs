@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title> Final Project </title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <link href="css/styles.css" rel="stylesheet">
-        <script src="js/functions.js"></script>
-    </head>
-    <body>
+<div id="account">
+    <% if (typeof logged != "undefined" && logged) { %>
+
+        		<p id="navigation">[ <a class="<%= active === 'store' && 'active' %>" href="/store"> Store Search </a> ]
+        		[ <a class="<%= active === 'cart' && 'active' %>" href="/cart"> Shopping Cart </a> ] </p>&nbsp;
+        		<p id="logged">[ <%= username %>: <a class="button" href="/logout"><u>Logout</u></a> ]</p>
+
+    <% } else { %>
+        &nbsp;<p id="logged">Not Logged In</span>
+    <% } %>
+</div>
