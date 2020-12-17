@@ -94,7 +94,7 @@ async function prepStores(position) {
   const storesDiv = document.getElementById('stores');
   const storeContainer = document.createElement('div');
   storeContainer.id = 'store-container';
-  storeContainer.classList.add('row','row-cols-3');
+  storeContainer.classList.add('row', 'row-cols-3');
 
   const selectStore = document.createElement('h1');
   selectStore.innerText = 'Select a Store';
@@ -180,7 +180,7 @@ function displayProductSearch() {
 async function renderProducts(productName) {
   const products = await fetchProducts(productName);
   const productList = document.getElementById('product-list');
-  productList.classList.add('row','row-cols-3');
+  productList.classList.add('row', 'row-cols-3');
 
   for (const product of products) {
     const newListItem = document.createElement('div');
@@ -211,6 +211,10 @@ async function renderProducts(productName) {
   }
   initAddProductToCartHandler();
   productList.removeAttribute('hidden');
+
+  const submitButton = document.getElementById('submit-order');
+  initSubmitOrderHandler();
+  submitButton.removeAttribute('hidden');
 }
 
 function clearProductList() {
@@ -274,6 +278,14 @@ function initProductSearchHandler() {
   });
 }
 
+function initSubmitOrderHandler() {
+  const submitOrder = document.getElementById('submit-order');
+  submitOrder.addEventListener('click', function (event) {
+    event.preventDefault();
+    window.location.href = `/history?orderId=${orderId}`;
+  });
+}
+
 function initAddProductToCartHandler() {
   const cartIcons = document.querySelectorAll('.cart-img');
   for (const cartIcon of cartIcons) {
@@ -284,7 +296,7 @@ function initAddProductToCartHandler() {
 
       if (inCart) {
         console.log(inCart);
-        console.log('removing')
+        console.log('removing');
         removeItemFromCart(item);
       }
       else {

@@ -1,9 +1,16 @@
 /* global $ */
 $(document).ready(function () {
 
-  let orderID = 0;
+  // let orderID = 0;
+
+  const urlParams = new URLSearchParams(window.location.search);
+  let orderID = urlParams.get('orderId') || 0;
 
   loadOrderHistory();
+
+  if (orderID !== 0) {
+    loadOrder();
+  }
 
   async function loadOrderHistory() {
 
@@ -28,7 +35,7 @@ $(document).ready(function () {
 
   });
 
-  $('#order').on('click', async function () {
+  async function loadOrder() {
     console.log('Order Button');
     let url = `/api/order?id=${orderID}`;
     let response = await fetch(url);
@@ -40,6 +47,8 @@ $(document).ready(function () {
     data.forEach(function (i) {
       $('#orders').append(`<tr><td>${i.itemDescription}</td></tr>`);
     });
-  });
+  }
+
+  $('#order').on('click', loadOrder);
 
 }); //document

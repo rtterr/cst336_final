@@ -201,3 +201,9 @@ color: darkgray !important;
     border: 3px solid darkred;
     border-radius:0em 0.5em 0.5em 0.5em;
 }
+
+#submit-order-container {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
