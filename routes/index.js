@@ -211,7 +211,7 @@ function initRoutes(app) {
   });
 
   app.get('/api/history', function (req, res) {
-    let id = req.query.id;
+    let id = req.session.userid;
     let sql = `select orderID from Orders where userID = ${id}`;
 
     console.log('get history: ' + id);
@@ -225,7 +225,7 @@ function initRoutes(app) {
   });//api/history
 
   app.get('/api/customer', function (req, res) {
-    let id = req.query.id;
+    let id = req.session.userid;
     let sql = `select * from Users where userID = ${id}`;
 
     console.log('get user: ' + id);

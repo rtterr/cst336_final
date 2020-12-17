@@ -35,10 +35,10 @@ $(document).ready(function () {
     let data = await response.json();
 
     $('#orders').empty();
-    $('#orders').append('<tr><th>Item</th><th>Cost</th></tr>');
+    $('#orders').append('<tr><th>Item</th></tr>');
 
     data.forEach(function (i) {
-      $('#orders').append(`<tr><td>${i.itemDescription}</td><td>${i.itemCost}</td></tr>`);
+      $('#orders').append(`<tr><td>${i.itemDescription}</td></tr>`);
     });
   });
 

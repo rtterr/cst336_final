@@ -1,15 +1,25 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title> Final Project </title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <link href="css/styles.css" rel="stylesheet">
-    </head>
-    <body>
-        <main>
-            <h1> My Account </h1>
-            This is my account info ... <br>
-            This page must be password-protected
-            
-        </main>
+<%- include('partials/accountheader.ejs') %>
+<main>
+    <h1> My Account </h1>
+    <div id="accountinfo">
+        <form method="POST">
+            <div>
+                <label for="fname">Last Name:</label>
+                <input type="text" id="fname" name="fname" value=""/>
+            </div>
+            <div>
+                <label for="lname">First name:</label>
+                <input type="text" id="lname" name="lname" value=""/>
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value=""/>
+            </div>
+            <div>
+                <button type="submit">Update Profile</button>
+            </div>
+        </form>
+    </div>
+
+</main>
 <%- include('partials/footer.ejs') %>
