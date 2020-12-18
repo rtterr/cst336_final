@@ -1,0 +1,17 @@
+<%- include('partials/header.ejs') %>
+<script src="js/history.js"></script>
+<div class="container-main">
+    <h1> Orders </h1>
+    <label for="history">Please select an order number:</label><br />
+    <select id="history" name="history">
+        <option value="0"> Select One </option>
+    </select>
+    <br>
+    <button type="submit" class="button button-block" id="order" />Get Order</button>
+    <br>
+    <table id="orders">
+
+    </table>
+
+</div>
+<%- include('partials/footer.ejs') %>

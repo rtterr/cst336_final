@@ -1,0 +1,14 @@
+<%- include('partials/header.ejs') %>
+<div class="container-main">
+    <h1> Welcome! </h1>
+    Please select a store to search for items and start shopping.<br />
+    <button id="select-store" disabled>Select Store (Loading)</button>
+    <div id="stores" class="container" hidden></div>
+    <div id="product-search" hidden></div>
+    <div id="product-list" hidden></div>
+    <div id="submit-order-container">
+        <button id="submit-order" hidden>Submit Order</button>
+    </div>
+</div>
+<script src="js/welcome.js"></script>
+<%- include('partials/footer.ejs') %>
