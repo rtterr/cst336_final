@@ -42,6 +42,7 @@ $(document).ready(function () {
     let data = await response.json();
 
     $('#orders').empty();
+    $('#orders').append('<tr><th>Order Number: ' + orderID + '</tr></th>');
     $('#orders').append('<tr><th>Item</th></tr>');
 
     data.forEach(function (i) {

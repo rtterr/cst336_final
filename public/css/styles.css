@@ -207,3 +207,13 @@ color: darkgray !important;
     margin-bottom: 1rem;
     text-align: center;
 }
+
+#orders tr {
+    border:1px solid lightgray;
+}
+
+.container-main {
+    padding:1em;
+    border-radius:0.5em;
+    border: 3px solid darkred;
+}
